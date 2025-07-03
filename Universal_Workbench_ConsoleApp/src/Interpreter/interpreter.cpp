@@ -74,6 +74,34 @@ namespace Interp {
 					nstringcont = context;
 				}
 			}
+
+			std::string nfilepathcont = "";
+			//Detect filepaths
+			if (nstringcont != "") {
+				nfilepathcont = ABSPATH;
+				if (nstringcont.find('\\') != std::string::npos) {
+					std::cout << nstringcont << " " << nfilepathcont << std::endl;
+					while (nstringcont.find("..") != std::string::npos) {
+						const std::string navdel = "\\"; //To focus out the name of the file
+						int navstart = -1;
+						int navend = -1 * del.size();
+						int lastNavStart = -1;
+						//Basically, keep going to the last one, to chop off the file name and have a remaining directory
+						while (navend != -1 || navstart == -1) {
+							lastNavStart = navstart;
+							navstart = navend + navdel.size();
+							navend = nfilepathcont.find(navdel, navstart);
+						}
+						std::cout << nfilepathcont.length() << " " << lastNavStart << std::endl;
+						if (lastNavStart > -1) {
+							nfilepathcont.erase(lastNavStart);
+							nstringcont.erase(0, 2);
+						}
+					}
+				}
+				nfilepathcont += nstringcont;
+				std::cout << nfilepathcont << std::endl;
+			}
 			
 			//if trees
 			if (action == "log") { //TODO: implement backmoving in file tree
@@ -85,7 +113,9 @@ namespace Interp {
 					currentLog << "\nClosing log at " << str << std::endl;
 					currentLog.close();
 				}
-				currentLog.open(ABSPATH + nstringcont);
+				currentLog.open(nfilepathcont, std::fstream::out);
+				currentLog.close();
+				currentLog.open(nfilepathcont, std::fstream::app);
 
 				if (currentLog.is_open()) {
 					time_t timestamp;
@@ -93,13 +123,13 @@ namespace Interp {
 					time(&timestamp);
 					ctime_s(str, sizeof str, &timestamp);
 					currentLog << "Created new log at " << str << std::endl;
-					logpath = ABSPATH + nstringcont;
+					logpath = nfilepathcont;
 				}
 				else {
 					char errmsg[94];
 					strerror_s(errmsg, sizeof(errmsg), errno);
 
-					std::cout << "ERROR! CANNOT OPEN LOG FILE!" << "\n" << errmsg << "\n\n" << (ABSPATH+ nstringcont) << "\n" << std::endl;
+					std::cout << "ERROR! CANNOT OPEN LOG FILE!" << "\n" << errmsg << "\n\n" << nfilepathcont << "\n" << std::endl;
 				}
 			}
 			else if (action == "print") {
@@ -107,9 +137,14 @@ namespace Interp {
 				std::cout << "printing!" << std::endl;
 			}
 			else if (action == "open") {
-				readScriptFile(ABSPATH + nstringcont, currentLog);
+				readScriptFile(nfilepathcont, currentLog);
 				if (!currentLog.is_open()) {
 					currentLog.open(logpath, std::fstream::app);
+					time_t timestamp;
+					char str[26];
+					time(&timestamp);
+					ctime_s(str, sizeof str, &timestamp);
+					currentLog << "Reopened log at " << str << std::endl;
 				}
 				std::cout << "opening!" << std::endl;
 			}
@@ -153,6 +188,7 @@ namespace Interp {
 
 		//Space for internal script variables
 		std::fstream currentLog;
+		std::string logpath;
 
 
 		//File Reader
@@ -203,6 +239,35 @@ namespace Interp {
 				}
 			}
 
+
+			std::string nfilepathcont = "";
+			//Detect filepaths
+			if (nstringcont != "") {
+				nfilepathcont = ABSPATH;
+				if (nstringcont.find('\\') != std::string::npos) {
+					std::cout << nstringcont << " " << nfilepathcont << std::endl;
+					while (nstringcont.find("..") != std::string::npos) {
+						const std::string navdel = "\\"; //To focus out the name of the file
+						int navstart = -1;
+						int navend = -1 * del.size();
+						int lastNavStart = -1;
+						//Basically, keep going to the last one, to chop off the file name and have a remaining directory
+						while (navend != -1 || navstart == -1) {
+							lastNavStart = navstart;
+							navstart = navend + navdel.size();
+							navend = nfilepathcont.find(navdel, navstart);
+						}
+						std::cout << nfilepathcont.length() << " " << lastNavStart << std::endl;
+						if (lastNavStart > -1) {
+							nfilepathcont.erase(lastNavStart);
+							nstringcont.erase(0, 2);
+						}
+					}
+				}
+				nfilepathcont += nstringcont;
+				std::cout << nfilepathcont << std::endl;
+			}
+
 			//if trees
 			if (action == "log") { //TODO: implement backmoving in file tree
 				if (currentLog.is_open()) {
@@ -221,7 +286,9 @@ namespace Interp {
 					openfile << "\nClosing log at " << str << std::endl;
 					openfile.close();
 				}
-				currentLog.open(ABSPATH + nstringcont);
+				currentLog.open(nfilepathcont, std::fstream::out);
+				currentLog.close();
+				currentLog.open(nfilepathcont, std::fstream::app);
 
 				if (currentLog.is_open()) {
 					time_t timestamp;
@@ -234,7 +301,7 @@ namespace Interp {
 					char errmsg[94];
 					strerror_s(errmsg, sizeof(errmsg), errno);
 
-					std::cout << "ERROR! CANNOT OPEN LOG FILE!" << "\n" << errmsg << "\n\n" << (ABSPATH + nstringcont) << "\n" << std::endl;
+					std::cout << "ERROR! CANNOT OPEN LOG FILE!" << "\n" << errmsg << "\n\n" << nfilepathcont << "\n" << std::endl;
 				}
 			}
 			else if (action == "print") {
@@ -247,7 +314,15 @@ namespace Interp {
 				std::cout << "printing!" << std::endl;
 			}
 			else if (action == "open") {
-				readScriptFile(ABSPATH + nstringcont, currentLog);
+				readScriptFile(nfilepathcont, currentLog);
+				if (!currentLog.is_open()) {
+					currentLog.open(logpath, std::fstream::app);
+					time_t timestamp;
+					char str[26];
+					time(&timestamp);
+					ctime_s(str, sizeof str, &timestamp);
+					currentLog << "Reopened log at " << str << std::endl;
+				}
 				std::cout << "opening!" << std::endl;
 			}
 			else if (action == "closelog") {
