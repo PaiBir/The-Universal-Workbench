@@ -24,12 +24,21 @@
     <ClCompile Include="src\Interpreter\interpreter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Interpreter\environment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\BasicChemistryBuildup\CalcInChem_basics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Interpreter\interpreter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Interpreter\environment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\includes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

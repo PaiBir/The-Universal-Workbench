@@ -1,11 +1,5 @@
 #pragma once
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <ctime>
-#include <chrono>
-#include <cerrno>
+#include "../includes.h"
 
 namespace Interp {
 	void readScriptFile(std::string filename);

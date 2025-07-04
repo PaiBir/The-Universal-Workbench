@@ -123,11 +123,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Interpreter\environment.cpp" />
     <ClCompile Include="src\BasicChemistryBuildup\CalcInChem_basics.cpp" />
     <ClCompile Include="src\Interpreter\interpreter.cpp" />
     <ClCompile Include="src\Universal_Workbench_ConsoleApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\includes.h" />
+    <ClInclude Include="src\Interpreter\environment.h" />
     <ClInclude Include="src\BasicChemistryBuildup\CalcInChem_basics.h" />
     <ClInclude Include="src\Interpreter\interpreter.h" />
   </ItemGroup>
