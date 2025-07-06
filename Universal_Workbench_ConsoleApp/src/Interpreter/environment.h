@@ -12,13 +12,16 @@ namespace interp {
 	};
 	class interpvar {
 	private:
-		unsigned int lineVal;
+		int posInFile;
 		std::string filepath;
-	public:
-		std::string vartoken;
 		enum vartype typing;
 
-		interpvar(std::string vt, enum vartype typing);
+	public:
+		const std::string vartoken;
+
+		interpvar(std::string vt, enum vartype type, int pos, std::string fp);
+
+		template <typename T> void getvalue(std::vector<T>& assignment, std::fstream& file, std::string currentFile)
 	};
 	class environment
 	{
